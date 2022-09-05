@@ -20,5 +20,6 @@ const productSchema = new mongoose.Schema({
         required : true
     }
 })
+
 const prodcuts = mongoose.model('Product', productSchema)
 module.exports = prodcuts

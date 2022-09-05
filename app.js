@@ -8,6 +8,6 @@ app.use(express.json())
 app.use(userRouter)
 app.use(productRouter)
 
-app.listen(3000,()=>{
-    console.log('server listnening to port 8000')
+app.listen(process.env.PORT,()=>{
+    console.log(`server listnening to port ${process.env.PORT}`)
 })

@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 
 //Schema for user
 const userSchema = new mongoose.Schema({
-    username: {
+    name: {
         type: String,
         required: true,
         lowercase: true,
@@ -75,7 +75,7 @@ userSchema.statics.findByCredentials = async (email,password)=>{
 //generate JWT token
 userSchema.methods.generateAuthtoken = async function(){
     const user = this
-    const token = jwt.sign({_id: admin._id.toString()},'Soyft2022@sdsa343')
+    const token = jwt.sign({_id: admin._id.toString()}, process.env.JWT_SECRET)
     user.tokens = user.tokens.concat({token})
     await user.save()
     return token
@@ -86,7 +86,7 @@ userSchema.pre('save', async function (next) {
     const user = this
 
     if (user.isModified('password')) {
-        user.password = await bcrypt.hash(user.password, 8)
+        user.password = await bcrypt.hash(user.password, process.env.SALT)
     }
 
     next()
