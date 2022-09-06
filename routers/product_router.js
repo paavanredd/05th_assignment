@@ -6,7 +6,7 @@ const router = new express.Router()
 
 //create product
 router.post('/product/create', auth, async (req,res)=>{
-    if(User.role === "admin") {
+    if(req.user.role === "admin") {
         const product = new productModel({...req.body})
         try {
             await product.save()
@@ -45,13 +45,15 @@ router.patch('/product/:id', auth, async(req,res)=>{
         } catch (error) {
             res.status(400).send(error)
         }
+    } else {
+        res.status(403).send("Access restricted")
     }
 })
 
 //delete prodcts using name
 router.delete('/product/delete/:id', auth, adminAuth, async(req,res)=>{
     const _id = req.params.id
-    if(User.role === "admin" || "manager") {
+    if(User.role === "admin") {
         try {
             const product = await productModel.deleteOne({_id})
             if(!product){
@@ -61,6 +63,8 @@ router.delete('/product/delete/:id', auth, adminAuth, async(req,res)=>{
         } catch (error) {
             res.status(400).send(error)
         }
+    } else {
+        res.status(403).send("Access restricted")
     }
 })
 
